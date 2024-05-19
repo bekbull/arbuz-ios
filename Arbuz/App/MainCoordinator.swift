@@ -15,30 +15,31 @@ final class MainCoordinator: RootViewControllerProvider {
     
     init() {
         self.rootViewController = UITabBarController()
-        rootViewController.tabBar.isTranslucent = true
-        rootViewController.tabBar.backgroundColor = .lightGray
+        rootViewController.tabBar.unselectedItemTintColor = .black
+        rootViewController.tabBar.tintColor = .green
+        
     }
     
     func start() {
         
-        let firstCoordinator = HomeCoordinator()
-        firstCoordinator.start()
-        self.childCoordinators.append(firstCoordinator)
-        let firstViewController = firstCoordinator.rootViewController
+        let homeCoordinator = HomeCoordinator()
+        homeCoordinator.start()
+        self.childCoordinators.append(homeCoordinator)
+        let firstViewController = homeCoordinator.rootViewController
         setup(vc: firstViewController,
-              title: "First Tab",
-              imageName: "paperplane",
-              selectedImageName: "paperplane.fill")
+              title: "Main",
+              imageName: "house",
+              selectedImageName: "house.fill")
         
         
-        let secondCoordinator = BasketCoordinator()
-        secondCoordinator.start()
-        self.childCoordinators.append(secondCoordinator)
-        let secondViewController = secondCoordinator.rootViewController
+        let basketCoordinator = BasketCoordinator()
+        basketCoordinator.start()
+        self.childCoordinators.append(basketCoordinator)
+        let secondViewController = basketCoordinator.rootViewController
         setup(vc: secondViewController,
-              title: "Second Tab",
-              imageName: "bell",
-              selectedImageName: "bell.fill")
+              title: "Basket",
+              imageName: "cart",
+              selectedImageName: "cart.fill")
         
         
         self.rootViewController.viewControllers = [firstViewController, secondViewController]
