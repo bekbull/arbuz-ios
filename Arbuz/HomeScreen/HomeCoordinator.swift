@@ -14,7 +14,7 @@ class HomeCoordinator: NSObject, Coordinator {
     lazy var secondViewController: UIViewController = {
         let vc = ProductsViewController()
         vc.title = "Main"
-        vc.view.backgroundColor = .cyan
+//        vc.view.backgroundColor = .cyan
         return vc
     }()
     
