@@ -1,11 +1,11 @@
 //
-//  ProductCell.swift
+//  Product.swift
 //  Arbuz
 //
-//  Created by Bekbol Bolatov on 18.05.2024.
+//  Created by Bekbol Bolatov on 19.05.2024.
 //
 
-import UIKit
+import Foundation
 
 struct Product: Identifiable {
     let id = UUID()

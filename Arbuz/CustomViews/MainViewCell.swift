@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct MainViewCell: View {
     let productImage: String
@@ -20,12 +19,18 @@ struct MainViewCell: View {
     @State private var isInBasket = false
     @State private var cnt = 0
     @State private var basketQuantity = 0
-    @State private var image: Image?
+    
+    let onTap: () -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            productImageView
-            productInfoView
+            VStack(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/, spacing: 0) {
+                productImageView
+                productInfoView
+            }
+            .onTapGesture {
+                onTap()
+            }
             Spacer()
             actionButton
         }
@@ -34,13 +39,22 @@ struct MainViewCell: View {
     }
     
     private var productImageView: some View {
-        ZStack(alignment: .top) {
+        @StateObject var viewModel = ProductImageViewModel()
+        
+        return ZStack(alignment: .top) {
             // Main Image
-            Image(productImage)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(height: 100)
-                .clipped()
+            if let image = viewModel.image {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(height: 100)
+                    .clipped()
+            } else {
+                ProgressView()
+                    .onAppear {
+                        viewModel.fetchImage(from: productImage)
+                    }
+            }
             
             VStack {
                 // Like Button
@@ -144,7 +158,7 @@ struct MainViewCell: View {
                 CustomButton(action: { cnt -= 1 }, imageName: "minus", fontSize: 18, foregroundColor: .white)
                 Spacer()
                 Button {
-                    #warning("Present detailed view")
+                    onTap()
                 } label: {
                     Text("\(cnt)")
                         .font(.system(size: 12))

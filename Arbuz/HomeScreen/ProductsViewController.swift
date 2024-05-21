@@ -17,7 +17,7 @@ final class ProductCollectionViewCell: UICollectionViewCell {
         productPrice: "",
         productUnit: "",
         productDiscount: "",
-        isDiscounted: false
+        isDiscounted: false, onTap: { return }
     ))
     
     override init(frame: CGRect) {
@@ -37,14 +37,14 @@ final class ProductCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with product: Product) {
+    func configure(with product: Product, onTap: @escaping () -> Void) {
         hostingController.rootView = MainViewCell(
             productImage: product.image,
             productTitle: product.title,
             productPrice: product.price,
             productUnit: product.unit,
             productDiscount: product.discount ?? "",
-            isDiscounted: product.isDiscounted
+            isDiscounted: product.isDiscounted, onTap: onTap
         )
     }
 }
@@ -66,6 +66,7 @@ final class ProductsViewController: UIViewController, UICollectionViewDataSource
     }
     
     private func setupCollectionView() {
+//        guard var collectionView else { return }
         let layout = UICollectionViewFlowLayout()
         let itemWidth = (view.frame.width / 3) - 16
         layout.itemSize = CGSize(width: itemWidth, height: 190)
@@ -86,8 +87,15 @@ final class ProductsViewController: UIViewController, UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductCollectionViewCell.reuseIdentifier, for: indexPath) as! ProductCollectionViewCell
-        cell.configure(with: products[indexPath.item])
+        cell.configure(with: products[indexPath.item]) { [weak self] in
+            self?.cellTapped(at: indexPath)
+        }
         return cell
+    }
+    
+    private func cellTapped(at indexPath: IndexPath) {
+        let productViewController = ProductViewController(with: indexPath.item)
+        self.present(productViewController, animated: true, completion: nil)
     }
 }
 
